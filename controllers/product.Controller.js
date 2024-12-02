@@ -110,11 +110,21 @@ const deleteProduct = (req, res, next) => {
 }
 
 const filterProducts = (req, res, next) => {
+    console.log('Query recibida:', req.query);
+
     Product
         .find(req.query)
-        .then(products => res.json(products))
-        .catch(err => next(err))
-}
+        .then(product => {
+            if (!product) {
+                return res.status(404).json({ message: 'Producto no encontrado' });
+            }
+            res.json(product);
+        })
+        .catch(err => next(err));
+};
+
+
+
 
 module.exports = {
     getProduct,
