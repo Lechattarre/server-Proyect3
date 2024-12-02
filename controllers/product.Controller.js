@@ -11,20 +11,23 @@ const getProduct = (req, res, next) => {
 }
 
 const getOneProduct = (req, res, next) => {
+    const { _id: productId } = req.params;
 
-    const { id: productId } = req.params
-
-    if (!mongoose.types.ObjectId.isValid(productId)) {
-        res.status(404).json({ message: "id not valid ;)" })
-        return
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+        return res.status(404).json({ message: "ID not valid ;)" });
     }
 
     Product
-        .find(productId)
-        // .select({})
-        .then(products => res.json(products))
-        .catch(err => next(err))
-}
+        .findById(productId)
+        .then(product => {
+            if (!product) {
+                return res.status(404).json({ message: "Product not found" });
+            }
+            res.json(product);
+        })
+        .catch(err => next(err));
+};
+
 
 const saveProduct = (req, res, next) => {
     const {
@@ -36,11 +39,10 @@ const saveProduct = (req, res, next) => {
         specs,
         category,
         subcategory,
-        brand,
-        company
+        brand
     } = req.body;
 
-    const { _id: owner } = req.payload;
+    const { _id: company } = req.payload;
 
     if (!name || !price || !stock || !category) {
         return res.status(400).json({ message: "Faltan campos obligatorios" });
@@ -77,26 +79,26 @@ const editProduct = (req, res, next) => {
         subcategory,
         brand,
         company } = req.body
-    const { id: productId } = req.params
+    const { _id: productId } = req.params
 
 
-    if (!mongoose.types.ObjectId.isValid(productId)) {
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
         res.status(404).json({ message: "id not valid ;)" })
         return
     }
 
 
     Product
-        .findByIdAndUpdate(productId, { name, description, cover, price, stock, specs, category, subcategory, brand, company }, { runValidators: true })
+        .findByIdAndUpdate(productId, { name, description, cover, price, stock, specs, category, subcategory, brand, company }, { new: true }, { runValidators: true })
         .then(() => res.sendStatus(200))
         .catch(err => next(err))
 }
 
 const deleteProduct = (req, res, next) => {
 
-    const { id: productId } = req.params
+    const { _id: productId } = req.params
 
-    if (!mongoose.types.ObjectId.isValid(productId)) {
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
         res.status(404).json({ message: "id not valid ;)" })
         return
     }

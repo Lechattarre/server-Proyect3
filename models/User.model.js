@@ -22,22 +22,23 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["ADMIN", "CLIENT", "COMPANY"]
+      enum: ["ADMIN", "CLIENT", "COMPANY"],
+      default: 'CLIENT'
     },
     phone: {
       type: String
     },
     address: {
-        city: {
-          type: String
-        },
-        zipcode: {
-          type: String
-        },
-        firstAddress: {
-          type: String
-        }
+      city: {
+        type: String
       },
+      zipcode: {
+        type: String
+      },
+      firstAddress: {
+        type: String
+      }
+    },
     avatar: {
       type: String
     }

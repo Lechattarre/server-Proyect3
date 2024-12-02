@@ -12,15 +12,15 @@ const getCompany = (req, res, next) => {
 
 const getOneCompany = (req, res, next) => {
 
-    const { id: CompanyId } = req.params
+    const { _id: CompanyId } = req.params
 
-    if (!mongoose.types.ObjectId.isValid(CompanyId)) {
+    if (!mongoose.Types.ObjectId.isValid(CompanyId)) {
         res.status(404).json({ message: "id not valid ;)" })
         return
     }
 
     Company
-        .find(CompanyId)
+        .findById(CompanyId)
         // .select({})
         .then(Companyes => res.json(Companyes))
         .catch(err => next(err))
@@ -29,18 +29,14 @@ const getOneCompany = (req, res, next) => {
 const saveCompany = (req, res, next) => {
     const { name,
         description,
-        cover,
-        price,
-        stock,
-        specs,
         category,
-        subcategory,
-        brand,
-        company } = req.body
+        address,
+        phone,
+    } = req.body
     const { _id: owner } = req.payload
 
     Company
-        .create({ name, description, cover, price, stock, specs, category, subcategory, brand, company, owner })
+        .create({ name, description, category, phone, address, owner })
         .then(Companyes => res.status(201).json(Companyes))
         .catch(err => next(err))
 }
@@ -48,40 +44,35 @@ const saveCompany = (req, res, next) => {
 const editCompany = (req, res, next) => {
     const { name,
         description,
-        cover,
-        price,
-        stock,
-        specs,
         category,
-        subcategory,
-        brand,
-        company } = req.body
-    const { id: CompanyId } = req.params
+        address,
+        phone, } = req.body
+    const { _id: companyId } = req.params
 
 
-    if (!mongoose.types.ObjectId.isValid(CompanyId)) {
+    if (!mongoose.Types.ObjectId.isValid(companyId)) {
         res.status(404).json({ message: "id not valid ;)" })
         return
     }
 
 
     Company
-        .findByIdAndUpdate(CompanyId, { name, description, cover, price, stock, specs, category, subcategory, brand, company }, { runValidators: true })
+        .findByIdAndUpdate(companyId, { name, description, category, phone, address }, { runValidators: true })
         .then(() => res.sendStatus(200))
         .catch(err => next(err))
 }
 
 const deleteCompany = (req, res, next) => {
 
-    const { id: CompanyId } = req.params
+    const { _id: companyId } = req.params
 
-    if (!mongoose.types.ObjectId.isValid(CompanyId)) {
+    if (!mongoose.Types.ObjectId.isValid(companyId)) {
         res.status(404).json({ message: "id not valid ;)" })
         return
     }
 
     Company
-        .findByIdAndDelete(CompanyId)
+        .findByIdAndDelete(companyId)
         .then(() => res.sendStatus(200))
         .catch(err => next(err))
 }

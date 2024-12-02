@@ -12,104 +12,71 @@ const getuser = (req, res, next) => {
 
 const getOneuser = (req, res, next) => {
 
-    const { id: userId } = req.params
+    const { _id: userId } = req.params
 
-    if (!mongoose.types.ObjectId.isValid(userId)) {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
         res.status(404).json({ message: "id not valid ;)" })
         return
     }
 
     User
-        .find(userId)
+        .findById(userId)
         // .select({})
         .then(users => res.json(users))
         .catch(err => next(err))
 }
 
-const saveuser = (req, res, next) => {
-    const {
-        firtsName,
-        lastName,
-        email,
-        password,
-        active,
-        role,
-        phone,
-        address: { city, zipcode, firstAddress },
-        avatar
-    } = req.body;
 
-    const { _id: owner } = req.payload;
-
-    User.create({
-        firtsName,
-        lastName,
-        email,
-        password,
-        active,
-        role,
-        phone,
-        address: { city, zipcode, firstAddress },
-        avatar,
-        owner
-    })
-        .then(user => res.status(201).json(user))
-        .catch(err => {
-            console.error("Error al guardar el usero:", err);
-            next(err);
-        });
-};
-
-const edituser = (req, res, next) => {
-    const { name,
-        firtsName,
-        lastName,
-        email,
-        password,
-        active,
-        role,
-        phone,
-        address: { city, zipcode, firstAddress },
-        avatar } = req.body
-    const { id: userId } = req.params
+// const edituser = (req, res, next) => {
+//     const {
+//         firtsName,
+//         lastName,
+//         email,
+//         password,
+//         active,
+//         role,
+//         phone,
+//         address: { city, zipcode, firstAddress },
+//         avatar } = req.body
+//     const { _id: userId } = req.params
 
 
-    if (!mongoose.types.ObjectId.isValid(userId)) {
-        res.status(404).json({ message: "id not valid ;)" })
-        return
-    }
+//     if (!mongoose.Types.ObjectId.isValid(userId)) {
+//         res.status(404).json({ message: "id not valid ;)" })
+//         return
+//     }
 
 
-    User
-        .findByIdAndUpdate(userId, {
-            firtsName,
-            lastName,
-            email,
-            password,
-            active,
-            role,
-            phone,
-            address: { city, zipcode, firstAddress },
-            avatar
-        }, { runValidators: true })
-        .then(() => res.sendStatus(200))
-        .catch(err => next(err))
-}
+//     User
+//         .findByIdAndUpdate(userId, {
+//             firtsName,
+//             lastName,
+//             email,
+//             password,
+//             active,
+//             role,
+//             phone,
+//             address: { city, zipcode, firstAddress },
+//             avatar
+//         }, { runValidators: true })
+//         .then(() => res.sendStatus(200))
+//         .catch(err => next(err))
+// }
 
-const deleteuser = (req, res, next) => {
+// const deleteuser = (req, res, next) => {
 
-    const { id: userId } = req.params
+//     const { _id: userId } = req.params
 
-    if (!mongoose.types.ObjectId.isValid(userId)) {
-        res.status(404).json({ message: "id not valid ;)" })
-        return
-    }
+//     if (!mongoose.Types.ObjectId.isValid(userId)) {
+//         res.status(404).json({ message: "id not valid ;)" })
+//         return
+//     }
 
-    User
-        .findByIdAndDelete(userId)
-        .then(() => res.sendStatus(200))
-        .catch(err => next(err))
-}
+//     User
+//         .findByIdAndDelete(userId)
+//         .then(() => res.sendStatus(200))
+//         .catch(err => next(err))
+// }
 
 const filterusers = (req, res, next) => {
     User
@@ -121,8 +88,8 @@ const filterusers = (req, res, next) => {
 module.exports = {
     getuser,
     getOneuser,
-    saveuser,
-    edituser,
-    deleteuser,
+    // saveUser,
+    // edituser,
+    // deleteuser,
     filterusers
 }

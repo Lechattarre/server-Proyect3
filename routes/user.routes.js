@@ -1,11 +1,8 @@
 const router = require("express").Router()
 
-
-const { verify } = require("jsonwebtoken")
 const {
     getuser,
     getOneuser,
-    saveuser,
     edituser,
     deleteuser,
     filterusers
@@ -14,11 +11,10 @@ const verifyToken = require("../middlewares/verifyToken")
 
 
 router.get('/users/search', verifyToken, filterusers)
-router.post('/users', verifyToken, saveuser)
-router.put('/users/:id', verifyToken, edituser)
-router.delete('/users/:id', verifyToken, deleteuser)
+// router.put('/users/:_id', verifyToken, edituser)
+// router.delete('/users/:_id', verifyToken, deleteuser)
 router.get('/users', verifyToken, getuser)
-router.get('/users/:id', verifyToken, getOneuser)
+router.get('/users/:_id', verifyToken, getOneuser)
 
 
 
