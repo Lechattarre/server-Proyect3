@@ -141,5 +141,5 @@ module.exports = {
     saveProduct,
     editProduct,
     deleteProduct,
-    filterProducts
+    // filterProducts
 }
