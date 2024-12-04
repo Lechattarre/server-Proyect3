@@ -84,6 +84,12 @@ const filterCompanies = (req, res, next) => {
         .catch(err => next(err))
 }
 
+// TODO 
+
+//  filtrado por categorias
+//  filtrado por direccion
+
+
 module.exports = {
     getCompany,
     getOneCompany,

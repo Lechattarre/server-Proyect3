@@ -109,20 +109,29 @@ const deleteProduct = (req, res, next) => {
         .catch(err => next(err))
 }
 
-const filterProducts = (req, res, next) => {
-    console.log('Query recibida:', req.query);
 
-    Product
-        .find(req.query)
-        .then(product => {
-            if (!product) {
-                return res.status(404).json({ message: 'Producto no encontrado' });
-            }
-            res.json(product);
-        })
-        .catch(err => next(err));
-};
+//TO DO
 
+// const filterProducts = (req, res, next) => {
+//     console.log('Query recibida:', req.query);
+
+//     Product
+//         .find(req.query)
+//         .then(product => {
+//             if (!product) {
+//                 return res.status(404).json({ message: 'Producto no encontrado' });
+//             }
+//             res.json(product);
+//         })
+//         .catch(err => next(err));
+// };
+
+
+
+// filtrsdo por precio
+// filtrado por categoria
+// filtrado por subcategoria
+// filtrado por compañia
 
 
 
