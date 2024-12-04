@@ -85,8 +85,8 @@ const loginUser = (req, res, next) => {
                 return;
             }
 
-            const { _id, email } = user;
-            const payload = { _id, email };
+            const { _id, email, firstName, lastName } = user;
+            const payload = { _id, email, firstName, lastName };
 
             const authToken = jwt.sign(
                 payload,
