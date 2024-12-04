@@ -26,6 +26,21 @@ const getOneuser = (req, res, next) => {
         .catch(err => next(err))
 }
 
+const getOwnerCompany = (req, res, next) => {
+
+    const { owner } = req.params
+
+    if (!mongoose.Types.ObjectId.isValid(owner)) {
+        res.status(404).json({ message: "id not valid ;)" })
+        return
+    }
+
+    User
+        .findById(owner)
+        .then(users => res.json(users))
+        .catch(err => next(err))
+}
+
 
 
 
@@ -54,8 +69,7 @@ const filterusers = (req, res, next) => {
 module.exports = {
     getuser,
     getOneuser,
-    // saveUser,
-    // edituser,
-    // deleteuser,
+    getOwnerCompany,
+    deleteuser,
     filterusers
 }
