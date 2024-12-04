@@ -110,30 +110,99 @@ const deleteProduct = (req, res, next) => {
 }
 
 
-//TO DO
+const filterProducts = (req, res, next) => {
+    console.log('Query recibida:', req.query)
 
-// const filterProducts = (req, res, next) => {
-//     console.log('Query recibida:', req.query);
-
-//     Product
-//         .find(req.query)
-//         .then(product => {
-//             if (!product) {
-//                 return res.status(404).json({ message: 'Producto no encontrado' });
-//             }
-//             res.json(product);
-//         })
-//         .catch(err => next(err));
-// };
+    Product
+        .find(req.query)
+        .then(product => {
+            if (!product) {
+                return res.status(404).json({ message: 'Producto no encontrado' })
+            }
+            res.json(product)
+        })
+        .catch(err => next(err))
+}
 
 
 
-// filtrsdo por precio
-// filtrado por categoria
-// filtrado por subcategoria
-// filtrado por compañia
+const filterProductsPrice = (req, res, next) => {
+
+    const { minPrice, maxPrice } = req.query
+    const filters = {}
+
+    if (minPrice || maxPrice) {
+        filters.price = {}
+        if (minPrice) filters.price.$gte = parseFloat(minPrice)
+        if (maxPrice) filters.price.$lte = parseFloat(maxPrice)
+    }
+
+    Product
+        .find(filters)
+        .then(products => {
+            if (products.length === 0) {
+                return res.status(404).json({ message: 'products not found' })
+            }
+
+            res.json(products)
+        })
+        .catch(err => next(err))
+
+}
 
 
+const categoryfilter = (res, req, next) => {
+    const { category } = req.query
+    const filter = {}
+
+    if (category) {
+        filter.category = category
+    }
+    Product
+        .find(filter)
+        .then(products => {
+            if (products.length === 0) {
+                return res.status(404).json({ message: 'products not found' });
+            }
+            res.status(200).json(products);
+        })
+        .catch(err => next(err))
+}
+
+const subCategoryfilter = (res, req, next) => {
+    const { subcategory } = req.query
+    const filter = {}
+
+    if (subcategory) {
+        filter.subcategory = subcategory
+    }
+    Product
+        .find(filter)
+        .then(products => {
+            if (products.length === 0) {
+                return res.status(404).json({ message: 'products not found' });
+            }
+            res.status(200).json(products);
+        })
+        .catch(err => next(err))
+}
+const companyfilter = (res, req, next) => {
+    const { company } = req.query
+    const filter = {}
+
+    if (company) {
+        filter.company = company
+    }
+    Product
+        .find(filter)
+        .then(products => {
+            if (products.length === 0) {
+                return res.status(404).json({ message: 'products not found' });
+            }
+            res.status(200).json(products);
+        })
+        .catch(err => next(err))
+}
 
 module.exports = {
     getProduct,
@@ -141,5 +210,9 @@ module.exports = {
     saveProduct,
     editProduct,
     deleteProduct,
-    // filterProducts
+    filterProducts,
+    filterProductsPrice,
+    categoryfilter,
+    subCategoryfilter,
+    companyfilter
 }

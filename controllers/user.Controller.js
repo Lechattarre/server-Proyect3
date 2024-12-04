@@ -27,56 +27,22 @@ const getOneuser = (req, res, next) => {
 }
 
 
-// const edituser = (req, res, next) => {
-//     const {
-//         firtsName,
-//         lastName,
-//         email,
-//         password,
-//         active,
-//         role,
-//         phone,
-//         address: { city, zipcode, firstAddress },
-//         avatar } = req.body
-//     const { _id: userId } = req.params
 
 
-//     if (!mongoose.Types.ObjectId.isValid(userId)) {
-//         res.status(404).json({ message: "id not valid ;)" })
-//         return
-//     }
+const deleteuser = (req, res, next) => {
 
+    const { _id: userId } = req.params
 
-//     User
-//         .findByIdAndUpdate(userId, {
-//             firtsName,
-//             lastName,
-//             email,
-//             password,
-//             active,
-//             role,
-//             phone,
-//             address: { city, zipcode, firstAddress },
-//             avatar
-//         }, { runValidators: true })
-//         .then(() => res.sendStatus(200))
-//         .catch(err => next(err))
-// }
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        res.status(404).json({ message: "id not valid ;)" })
+        return
+    }
 
-// const deleteuser = (req, res, next) => {
-
-//     const { _id: userId } = req.params
-
-//     if (!mongoose.Types.ObjectId.isValid(userId)) {
-//         res.status(404).json({ message: "id not valid ;)" })
-//         return
-//     }
-
-//     User
-//         .findByIdAndDelete(userId)
-//         .then(() => res.sendStatus(200))
-//         .catch(err => next(err))
-// }
+    User
+        .findByIdAndDelete(userId)
+        .then(() => res.sendStatus(200))
+        .catch(err => next(err))
+}
 
 const filterusers = (req, res, next) => {
     User

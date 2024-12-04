@@ -6,13 +6,15 @@ const {
     saveCompany,
     editCompany,
     deleteCompany,
-    filterCompanies
+    filterCompanies,
+    categoryfilter
 } = require("../controllers/company.Controller")
 
 const verifyToken = require("../middlewares/verifyToken")
 
 
 router.get('/Companies/search', verifyToken, filterCompanies)
+router.get('/Companies/categories', verifyToken, categoryfilter)
 router.post('/Companies', verifyToken, saveCompany)
 router.put('/Companies/:_id', verifyToken, editCompany)
 router.delete('/Companies/:_id', verifyToken, deleteCompany)

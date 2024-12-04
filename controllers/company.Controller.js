@@ -6,7 +6,7 @@ const getCompany = (req, res, next) => {
     Company
         .find()
         // .select({})
-        .then(Companyes => res.json(Companyes))
+        .then(companies => res.json(companies))
         .catch(err => next(err))
 }
 
@@ -22,7 +22,7 @@ const getOneCompany = (req, res, next) => {
     Company
         .findById(CompanyId)
         // .select({})
-        .then(Companyes => res.json(Companyes))
+        .then(companies => res.json(companies))
         .catch(err => next(err))
 }
 
@@ -37,7 +37,7 @@ const saveCompany = (req, res, next) => {
 
     Company
         .create({ name, description, category, phone, address, owner })
-        .then(Companyes => res.status(201).json(Companyes))
+        .then(companies => res.status(201).json(companies))
         .catch(err => next(err))
 }
 
@@ -80,14 +80,33 @@ const deleteCompany = (req, res, next) => {
 const filterCompanies = (req, res, next) => {
     Company
         .find(req.query)
-        .then(Companyes => res.json(Companyes))
+        .then(companies => {
+            if (!companies) {
+                return res.status(404).json({ message: 'Producto no encontrado' })
+            }
+            res.json(companies)
+        })
         .catch(err => next(err))
 }
 
-// TODO 
+const categoryfilter = (req, res, next) => {
+    const { categories } = req.query
+    const filter = {}
 
-//  filtrado por categorias
-//  filtrado por direccion
+    if (categories) {
+        filter.categories = { $ne: [] }
+    }
+
+    Company
+        .find(filter)
+        .then(companies => {
+            if (companies.length === 0) {
+                return res.status(404).json({ message: 'No se encontraron empresas con categorías' })
+            }
+            res.status(200).json(companies)
+        })
+        .catch(err => next(err))
+}
 
 
 module.exports = {
@@ -96,5 +115,6 @@ module.exports = {
     saveCompany,
     editCompany,
     deleteCompany,
-    filterCompanies
+    filterCompanies,
+    categoryfilter
 }
