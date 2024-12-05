@@ -177,23 +177,19 @@ const subCategoryfilter = (res, req, next) => {
 }
 
 const companyfilter = (req, res, next) => {
-    const { id: company } = req.query
+    const { id: company } = req.query;
 
-    if (!mongoose.Types.ObjectId.isValid(company)) {
-        return res.status(404).json({ message: "ID not valid ;)" })
-    }
-
-    const filter = { company }
+    const filter = { company };
 
     Product.find(filter)
         .then(products => {
             if (products.length === 0) {
-                return res.status(404).json({ message: 'Products not found' })
+                return res.status(404).json({ message: 'Products not found' });
             }
             res.status(200).json(products);
         })
-        .catch(err => next(err))
-}
+        .catch(err => next(err));
+};
 
 module.exports = {
     getProduct,
