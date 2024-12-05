@@ -140,48 +140,6 @@ const deleteProduct = (req, res, next) => {
         .catch(err => next(err))
 }
 
-
-const filterProducts = (req, res, next) => {
-    console.log('Query recibida:', req.query)
-
-    Product
-        .find(req.query)
-        .then(product => {
-            if (!product) {
-                return res.status(404).json({ message: 'Producto no encontrado' })
-            }
-            res.json(product)
-        })
-        .catch(err => next(err))
-}
-
-
-
-const filterProductsPrice = (req, res, next) => {
-
-    const { minPrice, maxPrice } = req.query
-    const filters = {}
-
-    if (minPrice || maxPrice) {
-        filters.price = {}
-        if (minPrice) filters.price.$gte = parseFloat(minPrice)
-        if (maxPrice) filters.price.$lte = parseFloat(maxPrice)
-    }
-
-    Product
-        .find(filters)
-        .then(products => {
-            if (products.length === 0) {
-                return res.status(404).json({ message: 'products not found' })
-            }
-
-            res.json(products)
-        })
-        .catch(err => next(err))
-
-}
-
-
 const categoryfilter = (res, req, next) => {
     const { category } = req.query
     const filter = {}
@@ -236,10 +194,6 @@ const companyfilter = (req, res, next) => {
         })
         .catch(err => next(err))
 }
-    Product.findByIdAndDelete(id)
-        .then(() => res.status(204).send())
-        .catch(err => next(err));
-};
 
 module.exports = {
     getProduct,
@@ -247,6 +201,9 @@ module.exports = {
     saveProduct,
     editProduct,
     deleteProduct,
+    categoryfilter,
+    subCategoryfilter,
+    companyfilter,
     filterProducts,
     filterProductsPrice,
     filterProductsByCategory,
