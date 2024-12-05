@@ -128,8 +128,6 @@ const editProduct = (req, res, next) => {
 const deleteProduct = (req, res, next) => {
     const { id } = req.params;
 
-<<<<<<< HEAD
-    const { _id: productId } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(productId)) {
         res.status(404).json({ message: "id not valid ;)" })
@@ -238,12 +236,10 @@ const companyfilter = (req, res, next) => {
         })
         .catch(err => next(err))
 }
-=======
     Product.findByIdAndDelete(id)
         .then(() => res.status(204).send())
         .catch(err => next(err));
 };
->>>>>>> b128c6a29d6a8b4b7377de8be071899fba01faf8
 
 module.exports = {
     getProduct,
