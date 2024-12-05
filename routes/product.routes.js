@@ -19,7 +19,7 @@ router.get('/products', verifyToken, filterProducts)
 router.get('/products/price', verifyToken, filterProductsPrice)
 router.get('/products/category', verifyToken, categoryfilter)
 router.get('/products/subcategory', verifyToken, subCategoryfilter)
-router.get('/products/company', verifyToken, companyfilter)
+router.get('/products/company', verifyToken, companyfilter);
 
 router.post('/products', verifyToken, saveProduct)
 router.put('/products/:id', verifyToken, editProduct)
