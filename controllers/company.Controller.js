@@ -49,6 +49,7 @@ const getCompanyUser = (req, res, next) => {
 const saveCompany = (req, res, next) => {
     const { 
         name,
+        logo,
         description,
         category,
         address,
@@ -57,7 +58,7 @@ const saveCompany = (req, res, next) => {
     const { _id: owner } = req.payload
 
     Company
-        .create({ name, description, category, phone, address, owner })
+        .create({ name, logo, description, category, phone, address, owner })
         .then(companies => res.status(201).json(companies))
         .catch(err => next(err))
 }
