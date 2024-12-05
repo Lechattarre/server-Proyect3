@@ -14,14 +14,14 @@ const {
 const verifyToken = require("../middlewares/verifyToken")
 
 
-router.get('/Companies/search', verifyToken, filterCompanies)
-router.get('/Companies/categories', verifyToken, categoryfilter)
-router.post('/Companies', verifyToken, saveCompany)
-router.put('/Companies/:_id', verifyToken, editCompany)
-router.delete('/Companies/:_id', verifyToken, deleteCompany)
-router.get('/Companies', verifyToken, getCompany)
-router.get('/Companies/:_id', verifyToken, getOneCompany)
-router.get('/Companies/Owner/:owner', verifyToken, getCompanyUser)
+router.get('/companies/search', verifyToken, filterCompanies)
+router.get('/companies/categories', verifyToken, categoryfilter)
+router.post('/companies', verifyToken, saveCompany)
+router.put('/companies/:_id', verifyToken, editCompany)
+router.delete('/companies/:_id', verifyToken, deleteCompany)
+router.get('/companies', verifyToken, getCompany)
+router.get('/companies/:_id', verifyToken, getOneCompany)
+router.get('/companies/Owner/:owner', verifyToken, getCompanyUser)
 
 
 
