@@ -26,8 +26,29 @@ const getOneCompany = (req, res, next) => {
         .catch(err => next(err))
 }
 
+const getCompanyUser = (req, res, next) => {
+    const { owner } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(owner)) {
+        res.status(404).json({ message: "id not valid ;)" });
+        return;
+    }
+
+    Company
+        .findOne({ owner: owner })
+        .then(company => {
+            if (!company) {
+                res.status(404).json({ message: "Company not found" })
+                return;
+            }
+            res.json(company)
+        })
+        .catch(err => next(err))
+}
+
 const saveCompany = (req, res, next) => {
-    const { name,
+    const { 
+        name,
         description,
         category,
         address,
@@ -116,5 +137,6 @@ module.exports = {
     editCompany,
     deleteCompany,
     filterCompanies,
-    categoryfilter
+    categoryfilter,
+    getCompanyUser
 }
