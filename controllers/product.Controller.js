@@ -152,23 +152,67 @@ const filterProductsPrice = (req, res, next) => {
 
 
 const filterProductsByCategory = (req, res, next) => {
-    const { category } = req.query
+    const { category } = req.query;
 
     if (!category) {
-        return res.status(400).json({ message: "No category provided" })
+        return res.status(400).json({ message: 'Se debe proporcionar una categoría.' });
     }
 
-    Product
-        .find({ category: { $regex: new RegExp(`^${category}$`, 'i') } })
+    Product.find({ category: new RegExp(category, 'i') })
         .then(products => {
             if (products.length === 0) {
-                return res.status(404).json({ message: 'No products found in this category' })
+                return res.status(404).json({ message: 'No se encontraron productos en esta categoría.' });
             }
-            res.json(products)
+            res.json(products);
         })
-        .catch(err => next(err))
-}
+        .catch(err => next(err));
+};
 
+const filterProductsByPrice = (req, res, next) => {
+    const { minPrice, maxPrice } = req.query;
+
+    if (!minPrice && !maxPrice) {
+        return res.status(400).json({ message: 'Se debe proporcionar al menos un valor de precio.' });
+    }
+
+    const filters = {};
+    if (minPrice) filters.price = { $gte: parseFloat(minPrice) };
+    if (maxPrice) filters.price = { ...filters.price, $lte: parseFloat(maxPrice) };
+
+    Product.find(filters)
+        .then(products => {
+            if (products.length === 0) {
+                return res.status(404).json({ message: 'No se encontraron productos en este rango de precios.' });
+            }
+            res.json(products);
+        })
+        .catch(err => next(err));
+};
+
+const filterProductsByCategoryAndPrice = (req, res, next) => {
+    const { category, minPrice, maxPrice } = req.query;
+
+    const filters = {};
+
+    if (category) {
+        filters.category = new RegExp(category, 'i');
+    }
+
+    if (minPrice || maxPrice) {
+        filters.price = {};
+        if (minPrice) filters.price.$gte = parseFloat(minPrice);
+        if (maxPrice) filters.price.$lte = parseFloat(maxPrice);
+    }
+
+    Product.find(filters)
+        .then(products => {
+            if (products.length === 0) {
+                return res.status(404).json({ message: 'No se encontraron productos con los filtros aplicados.' });
+            }
+            res.json(products);
+        })
+        .catch(err => next(err));
+};
 
 const subCategoryfilter = (res, req, next) => {
     const { subcategory } = req.query
@@ -212,8 +256,9 @@ module.exports = {
     editProduct,
     deleteProduct,
     filterProducts,
-    filterProductsPrice,
+    filterProductsByPrice,
     filterProductsByCategory,
+    filterProductsByCategoryAndPrice,
     subCategoryfilter,
     companyfilter
 }

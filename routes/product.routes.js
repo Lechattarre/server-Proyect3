@@ -7,8 +7,9 @@ const {
     editProduct,
     deleteProduct,
     filterProducts,
-    filterProductsPrice,
+    filterProductsByPrice,
     filterProductsByCategory,
+    filterProductsByCategoryAndPrice,
     companyfilter,
     subCategoryfilter
 } = require("../controllers/product.Controller")
@@ -16,8 +17,9 @@ const {
 const verifyToken = require("../middlewares/verifyToken")
 
 router.get('/products', verifyToken, filterProducts)
-router.get('/products/price', verifyToken, filterProductsPrice)
-router.get('/products/category', verifyToken, filterProductsByCategory)
+router.get('/products/category', filterProductsByCategory);
+router.get('/products/price', filterProductsByPrice);
+router.get('/products/filter', filterProductsByCategoryAndPrice);
 router.get('/products/subcategory', verifyToken, subCategoryfilter)
 router.get('/products/company', verifyToken, companyfilter)
 
