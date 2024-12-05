@@ -151,23 +151,24 @@ const filterProductsPrice = (req, res, next) => {
 }
 
 
-const categoryfilter = (res, req, next) => {
+const filterProductsByCategory = (req, res, next) => {
     const { category } = req.query
-    const filter = {}
 
-    if (category) {
-        filter.category = category
+    if (!category) {
+        return res.status(400).json({ message: "No category provided" })
     }
+
     Product
-        .find(filter)
+        .find({ category: { $regex: new RegExp(`^${category}$`, 'i') } })
         .then(products => {
             if (products.length === 0) {
-                return res.status(404).json({ message: 'products not found' });
+                return res.status(404).json({ message: 'No products found in this category' })
             }
-            res.status(200).json(products);
+            res.json(products)
         })
         .catch(err => next(err))
 }
+
 
 const subCategoryfilter = (res, req, next) => {
     const { subcategory } = req.query
@@ -180,9 +181,9 @@ const subCategoryfilter = (res, req, next) => {
         .find(filter)
         .then(products => {
             if (products.length === 0) {
-                return res.status(404).json({ message: 'products not found' });
+                return res.status(404).json({ message: 'products not found' })
             }
-            res.status(200).json(products);
+            res.status(200).json(products)
         })
         .catch(err => next(err))
 }
@@ -212,7 +213,7 @@ module.exports = {
     deleteProduct,
     filterProducts,
     filterProductsPrice,
-    categoryfilter,
+    filterProductsByCategory,
     subCategoryfilter,
     companyfilter
 }

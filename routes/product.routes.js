@@ -8,7 +8,7 @@ const {
     deleteProduct,
     filterProducts,
     filterProductsPrice,
-    categoryfilter,
+    filterProductsByCategory,
     companyfilter,
     subCategoryfilter
 } = require("../controllers/product.Controller")
@@ -17,7 +17,7 @@ const verifyToken = require("../middlewares/verifyToken")
 
 router.get('/products', verifyToken, filterProducts)
 router.get('/products/price', verifyToken, filterProductsPrice)
-router.get('/products/category', verifyToken, categoryfilter)
+router.get('/products/category', verifyToken, filterProductsByCategory)
 router.get('/products/subcategory', verifyToken, subCategoryfilter)
 router.get('/products/company', verifyToken, companyfilter)
 
