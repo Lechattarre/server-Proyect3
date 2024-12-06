@@ -105,13 +105,13 @@ const getOneProduct = (req, res, next) => {
 };
 
 const saveProduct = (req, res, next) => {
-    const { name, description, price, stock, category, subcategory, company } = req.body;
+    const { name, description, price, stock, category, subcategory, specs, cover, company } = req.body;
 
     if (!name || !price || !stock || !category) {
         return res.status(400).json({ message: "Faltan campos obligatorios" });
     }
 
-    Product.create({ name, description, price, stock, category, subcategory, company })
+    Product.create({ name, description, price, stock, category, subcategory , specs , cover, company })
         .then(product => res.status(201).json(product))
         .catch(err => next(err));
 };
