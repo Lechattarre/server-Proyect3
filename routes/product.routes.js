@@ -33,7 +33,7 @@ router.get('/products/subcategory', verifyToken, filterProductsBySubCategory);
 
 router.get('/products/company', verifyToken, filterProductsByCompany);
 
-router.get('/products/:id', verifyToken, getOneProduct);
+router.get('/products/details/:id', verifyToken, getOneProduct);
 
 router.post('/products', verifyToken, saveProduct);
 

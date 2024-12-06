@@ -129,13 +129,13 @@ const deleteProduct = (req, res, next) => {
     const { id } = req.params;
 
 
-    if (!mongoose.Types.ObjectId.isValid(productId)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
         res.status(404).json({ message: "id not valid ;)" })
         return
     }
 
     Product
-        .findByIdAndDelete(productId)
+        .findByIdAndDelete(id)
         .then(() => res.sendStatus(200))
         .catch(err => next(err))
 }
