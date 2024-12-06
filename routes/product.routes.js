@@ -24,10 +24,10 @@ router.get('/products/subcategory', verifyToken, subCategoryfilter)
 router.get('/products/company', verifyToken, companyfilter)
 
 router.post('/products', verifyToken, saveProduct)
-router.put('/products/:id', verifyToken, editProduct)
-router.delete('/products/:id', verifyToken, deleteProduct)
+router.put('/products/:_id', verifyToken, editProduct)
+router.delete('/products/:_id', verifyToken, deleteProduct)
 
 router.get('/products/all', verifyToken, getProduct)
-router.get('/products/:id', verifyToken, getOneProduct)
+router.get('/products/details/:_id', verifyToken, getOneProduct)
 
 module.exports = router
