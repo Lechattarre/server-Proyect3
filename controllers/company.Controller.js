@@ -64,23 +64,25 @@ const saveCompany = (req, res, next) => {
 }
 
 const editCompany = (req, res, next) => {
-    const { name,
-        description,
-        category,
-        address,
-        phone, } = req.body
+    const { name, description, logo } = req.body
     const { _id: companyId } = req.params
 
-
     if (!mongoose.Types.ObjectId.isValid(companyId)) {
-        res.status(404).json({ message: "id not valid )" })
-        return
+        return res.status(404).json({ message: "ID not valid" })
     }
 
-
     Company
-        .findByIdAndUpdate(companyId, { name, description, category, phone, address }, { runValidators: true })
-        .then(() => res.sendStatus(200))
+        .findByIdAndUpdate(
+            companyId,
+            { name, description, logo },
+            { runValidators: true, new: true }
+        )
+        .then((updatedCompany) => {
+            if (!updatedCompany) {
+                return res.status(404).json({ message: "Company not found" })
+            }
+            res.status(200).json(updatedCompany)
+        })
         .catch(err => next(err))
 }
 
