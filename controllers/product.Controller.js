@@ -1,4 +1,6 @@
 const Product = require("../models/Product.model");
+const mongoose = require('mongoose')
+
 
 const filterProducts = (req, res, next) => {
     const { category, subcategory, company, minPrice, maxPrice } = req.query;
@@ -111,7 +113,7 @@ const saveProduct = (req, res, next) => {
         return res.status(400).json({ message: "Faltan campos obligatorios" });
     }
 
-    Product.create({ name, description, price, stock, category, subcategory , specs , cover, company })
+    Product.create({ name, description, price, stock, category, subcategory, specs, cover, company })
         .then(product => res.status(201).json(product))
         .catch(err => next(err));
 };
