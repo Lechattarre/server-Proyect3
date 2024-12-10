@@ -2,19 +2,11 @@ const { Schema, model } = require("mongoose")
 
 const cartSchema = new Schema(
     {
-        owner: {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        products: [
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+        items: [
             {
-                product: {
-                    type: Schema.Types.ObjectId,
-                    ref: 'Product'
-                },
-                quantity: {
-                    type: Number
-                }
+                product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+                quantity: { type: Number, required: true, default: 1 }
             }
         ],
         status: {
