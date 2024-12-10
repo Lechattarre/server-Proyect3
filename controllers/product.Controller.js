@@ -1,4 +1,6 @@
 const Product = require("../models/Product.model")
+const mongoose = require('mongoose')
+
 
 const filterProducts = (req, res, next) => {
     const { category, subcategory, company, minPrice, maxPrice } = req.query
