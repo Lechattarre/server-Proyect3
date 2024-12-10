@@ -25,6 +25,43 @@ const filterProducts = (req, res, next) => {
         .catch(err => next(err));
 };
 
+const filterProductsSearch = (req, res, next) => {
+    const { category, search } = req.query;
+    const filters = {};
+
+    try {
+        // Filtrar por categoría si está presente
+        if (category) {
+            if (["electronic", "dormitory", "gaming"].includes(category)) {
+                filters.category = category;
+            } else {
+                return res.status(400).json({ message: "Categoría no válida." });
+            }
+        }
+
+        // Filtrar solo por nombre si se proporciona 'search'
+        if (search) {
+            filters.name = { $regex: search, $options: "i" };
+        }
+
+        // Ejecutar consulta
+        Product.find(filters)
+            .then(products => {
+                if (!products.length) {
+                    return res.status(404).json({ message: "No se encontraron productos." });
+                }
+                res.json(products);
+            })
+            .catch(err => {
+                console.error("Error en la búsqueda de productos:", err);
+                res.status(500).json({ message: "Error interno del servidor", error: err.message });
+            });
+    } catch (err) {
+        console.error("Error general:", err);
+        res.status(500).json({ message: "Error interno del servidor", error: err.message });
+    }
+};
+
 const filterProductsPrice = (req, res, next) => {
     const { minPrice, maxPrice } = req.query;
     const filters = {};
@@ -206,5 +243,6 @@ module.exports = {
     filterProductsPrice,
     filterProductsByCategory,
     filterProductsBySubCategory,
-    filterProductsByCompany
+    filterProductsByCompany,
+    filterProductsSearch
 };

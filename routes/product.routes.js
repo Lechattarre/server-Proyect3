@@ -15,12 +15,14 @@ const {
     filterProductsByCategory,
     filterProductsBySubCategory,
     filterProductsByCompany,
-    filterProducts
+    filterProducts,
+    filterProductsSearch
 } = require("../controllers/product.Controller");
 
 const verifyToken = require("../middlewares/verifyToken");
 
 router.get('/products', verifyToken, filterProducts)
+router.get('/products/search', verifyToken, filterProductsSearch)
 router.get('/products/price', verifyToken, filterProductsPrice)
 router.get('/products/category', verifyToken, categoryfilter)
 router.get('/products/subcategory', verifyToken, subCategoryfilter)
