@@ -1,7 +1,7 @@
-const User = require('./../models/User.model');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const saltRound = 10;
+const User = require('./../models/User.model')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const saltRound = 10
 
 const signupUser = (req, res, next) => {
     const {
@@ -14,34 +14,34 @@ const signupUser = (req, res, next) => {
         phone,
         address: { city, zipcode, firstAddress } = {},
         avatar
-    } = req.body;
+    } = req.body
 
     if (!email || !password) {
-        res.status(400).json({ message: "Provide email and password." });
-        return;
+        res.status(400).json({ message: "Provide email and password." })
+        return
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
     if (!emailRegex.test(email)) {
-        res.status(400).json({ message: "Provide a valid email address." });
-        return;
+        res.status(400).json({ message: "Provide a valid email address." })
+        return
     }
 
     if (password.length < 3) {
-        res.status(400).json({ message: "Password too short." });
-        return;
+        res.status(400).json({ message: "Password too short." })
+        return
     }
 
     User
         .findOne({ email })
         .then(existingUser => {
             if (existingUser) {
-                res.status(400).json({ message: "User already exists." });
-                return;
+                res.status(400).json({ message: "User already exists." })
+                return
             }
 
-            const salt = bcrypt.genSaltSync(saltRound);
-            const hashedPassword = bcrypt.hashSync(password, salt);
+            const salt = bcrypt.genSaltSync(saltRound)
+            const hashedPassword = bcrypt.hashSync(password, salt)
 
             return User.create({
                 firstName,
@@ -53,60 +53,60 @@ const signupUser = (req, res, next) => {
                 phone,
                 address: { city, zipcode, firstAddress },
                 avatar
-            });
+            })
         })
         .then(newUser => {
-            res.status(201).json(newUser);
+            res.status(201).json(newUser)
         })
         .catch(err => {
-            console.error("Error al crear el usuario:", err);
-            next(err);
-        });
-};
+            console.error("Error al crear el usuario:", err)
+            next(err)
+        })
+}
 const loginUser = (req, res, next) => {
-    const { email, password } = req.body;
+    const { email, password } = req.body
 
     if (!email || !password) {
-        next(new Error("Provide email and password."));
-        return;
+        next(new Error("Provide email and password."))
+        return
     }
 
     User
         .findOne({ email })
         .then(user => {
             if (!user) {
-                res.status(401).json({ message: "User not found." });
-                return;
+                res.status(401).json({ message: "User not found." })
+                return
             }
 
-            const isCorrectPwd = bcrypt.compareSync(password, user.password);
+            const isCorrectPwd = bcrypt.compareSync(password, user.password)
             if (!isCorrectPwd) {
-                res.status(401).json({ message: "Unable to authenticate the user." });
-                return;
+                res.status(401).json({ message: "Unable to authenticate the user." })
+                return
             }
 
-            const { _id, email, firstName, lastName } = user;
-            const payload = { _id, email, firstName, lastName };
+            const { _id, email, firstName, lastName } = user
+            const payload = { _id, email, firstName, lastName }
 
             const authToken = jwt.sign(
                 payload,
                 process.env.TOKEN_SECRET,
                 { algorithm: 'HS256', expiresIn: "6h" }
-            );
-            res.json({ authToken });
+            )
+            res.json({ authToken })
         })
         .catch(err => {
-            console.error("Error al autenticar el usuario:", err);
-            next(err);
-        });
-};
+            console.error("Error al autenticar el usuario:", err)
+            next(err)
+        })
+}
 
 const verifyUser = (req, res, next) => {
-    res.json({ loggedUserData: req.payload });
-};
+    res.json({ loggedUserData: req.payload })
+}
 
 module.exports = {
     signupUser,
     loginUser,
     verifyUser
-};
+}

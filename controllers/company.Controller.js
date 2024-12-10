@@ -15,7 +15,7 @@ const getOneCompany = (req, res, next) => {
     const { _id: CompanyId } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(CompanyId)) {
-        res.status(404).json({ message: "id not valid ;)" })
+        res.status(404).json({ message: "id not valid )" })
         return
     }
 
@@ -27,11 +27,11 @@ const getOneCompany = (req, res, next) => {
 }
 
 const getCompanyUser = (req, res, next) => {
-    const { owner } = req.params;
+    const { owner } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(owner)) {
-        res.status(404).json({ message: "id not valid ;)" });
-        return;
+        res.status(404).json({ message: "id not valid )" })
+        return
     }
 
     Company
@@ -39,7 +39,7 @@ const getCompanyUser = (req, res, next) => {
         .then(company => {
             if (!company) {
                 res.status(404).json({ message: "Company not found" })
-                return;
+                return
             }
             res.json(company)
         })
@@ -47,7 +47,7 @@ const getCompanyUser = (req, res, next) => {
 }
 
 const saveCompany = (req, res, next) => {
-    const { 
+    const {
         name,
         logo,
         description,
@@ -73,7 +73,7 @@ const editCompany = (req, res, next) => {
 
 
     if (!mongoose.Types.ObjectId.isValid(companyId)) {
-        res.status(404).json({ message: "id not valid ;)" })
+        res.status(404).json({ message: "id not valid )" })
         return
     }
 
@@ -89,7 +89,7 @@ const deleteCompany = (req, res, next) => {
     const { _id: companyId } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(companyId)) {
-        res.status(404).json({ message: "id not valid ;)" })
+        res.status(404).json({ message: "id not valid )" })
         return
     }
 

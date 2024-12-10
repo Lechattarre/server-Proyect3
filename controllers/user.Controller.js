@@ -15,7 +15,7 @@ const getOneuser = (req, res, next) => {
     const { _id: userId } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-        res.status(404).json({ message: "id not valid ;)" })
+        res.status(404).json({ message: "id not valid )" })
         return
     }
 
@@ -31,7 +31,7 @@ const getOwnerCompany = (req, res, next) => {
     const { owner } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(owner)) {
-        res.status(404).json({ message: "id not valid ;)" })
+        res.status(404).json({ message: "id not valid )" })
         return
     }
 
@@ -49,7 +49,7 @@ const deleteuser = (req, res, next) => {
     const { _id: userId } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-        res.status(404).json({ message: "id not valid ;)" })
+        res.status(404).json({ message: "id not valid )" })
         return
     }
 
