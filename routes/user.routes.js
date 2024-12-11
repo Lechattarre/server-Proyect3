@@ -5,12 +5,14 @@ const {
     getOneuser,
     getOwnerCompany,
     deleteuser,
+    getPurchasesByUser,
     filterusers
 } = require("../controllers/user.Controller")
 
 const verifyToken = require("../middlewares/verifyToken")
 
 router.get('/users/search', verifyToken, filterusers)
+router.get('/purchases/:userId', verifyToken, getPurchasesByUser)
 router.get('/users/:owner', verifyToken, getOwnerCompany)
 router.get('/users', verifyToken, getuser)
 router.get('/users/:_id', verifyToken, getOneuser)

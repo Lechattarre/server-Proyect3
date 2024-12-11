@@ -65,11 +65,22 @@ const filterusers = (req, res, next) => {
         .then(users => res.json(users))
         .catch(err => next(err))
 }
+const getPurchasesByUser = (req, res, next) => {
+    const { userId } = req.params;
+
+    Purchase
+        .find({ userId })
+        .then(purchases => res.json(purchases))
+        .catch(err => next(err));
+};
+
+
 
 module.exports = {
     getuser,
     getOneuser,
     getOwnerCompany,
     deleteuser,
+    getPurchasesByUser,
     filterusers
 }
