@@ -11,6 +11,9 @@ module.exports = app => {
     const userRouter = require("./user.routes")
     app.use("/api", userRouter)
 
+    const cartRouter = require("./cart.routes")
+    app.use("/api", cartRouter)
+
     const purchaseRouter = require("./purchase.routes")
     app.use("/api", purchaseRouter)
 }   
