@@ -10,4 +10,7 @@ module.exports = app => {
 
     const userRouter = require("./user.routes")
     app.use("/api", userRouter)
+
+    const purchaseRouter = require("./purchase.routes")
+    app.use("/api", purchaseRouter)
 }   
