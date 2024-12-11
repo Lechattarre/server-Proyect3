@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose")
+const { Schema, model } = require("mongoose");
 
 const cartSchema = new Schema(
     {
@@ -19,14 +19,18 @@ const cartSchema = new Schema(
         ],
         status: {
             type: String,
-            enum: ['pending, finished']
-        }
+            enum: ['pending', 'finished'],
+            default: 'pending'
+        },
+        isPriceValid: { type: Number, default: 1.0 },
+        isTotalValid: { type: Number, default: 1.0 },
+        total: { type: Number, required: true, default: 0.0 }
     },
     {
         timestamps: true
     }
-)
+);
 
-const Cart = model("Cart", cartSchema)
+const Cart = model("Cart", cartSchema);
 
-module.exports = Cart
+module.exports = Cart;
