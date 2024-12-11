@@ -1,6 +1,8 @@
 const User = require('./../models/User.model')
+
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const Company = require('../models/Company.model')
 const saltRound = 10
 
 const signupUser = (req, res, next) => {
@@ -63,6 +65,7 @@ const signupUser = (req, res, next) => {
             next(err)
         })
 }
+
 const loginUser = (req, res, next) => {
     const { email, password } = req.body
 
@@ -71,8 +74,7 @@ const loginUser = (req, res, next) => {
         return
     }
 
-    User
-        .findOne({ email })
+    User.findOne({ email })
         .then(user => {
             if (!user) {
                 res.status(401).json({ message: "User not found." })
@@ -85,15 +87,35 @@ const loginUser = (req, res, next) => {
                 return
             }
 
-            const { _id, email, firstName, lastName } = user
-            const payload = { _id, email, firstName, lastName }
+            Company.findOne({ owner: user._id })
+                .then(company => {
+                    const { _id, email, firstName, lastName } = user
 
-            const authToken = jwt.sign(
-                payload,
-                process.env.TOKEN_SECRET,
-                { algorithm: 'HS256', expiresIn: "6h" }
-            )
-            res.json({ authToken })
+                    // Crear el payload incluyendo los datos de la compañía
+                    const payload = {
+                        _id,
+                        email,
+                        firstName,
+                        lastName,
+                        company: company ? { name: company.name, id: company._id } : null
+                    }
+
+                    const authToken = jwt.sign(
+                        payload,
+                        process.env.TOKEN_SECRET,
+                        { algorithm: 'HS256', expiresIn: "6h" }
+                    )
+
+                    res.json({
+                        authToken,
+                        user: { _id, email, firstName, lastName },
+                        company: company || null
+                    })
+                })
+                .catch(err => {
+                    console.error("Error al obtener la compañía del usuario:", err)
+                    next(err)
+                })
         })
         .catch(err => {
             console.error("Error al autenticar el usuario:", err)
@@ -102,7 +124,17 @@ const loginUser = (req, res, next) => {
 }
 
 const verifyUser = (req, res, next) => {
-    res.json({ loggedUserData: req.payload })
+    const { _id, email, firstName, lastName, company } = req.payload
+
+    res.json({
+        loggedUserData: {
+            _id,
+            email,
+            firstName,
+            lastName,
+            company
+        }
+    })
 }
 
 module.exports = {
