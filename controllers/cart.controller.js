@@ -118,27 +118,49 @@ const clearCart = (req, res) => {
 
 
 };
-const checkoutCart = (req, res) => {
+const checkoutCart = async (req, res) => {
     const { cart } = req.body;
-    const { _id: userId } = req.params;
+    const { _id: userId } = req.payload;
 
-    if (!cart || cart.length === 0) {
+    if (!cart || !Array.isArray(cart.items) || cart.items.length === 0) {
         return res.status(400).json({ message: 'El carrito está vacío' });
     }
 
-    const newCart = new Cart({
-        user: userId,
-        items: cart
-    });
+    try {
+        const productIds = cart.items.map(item => item.product);
+        const products = await Product.find({ '_id': { $in: productIds } });
 
-    newCart.save()
-        .then(cart => {
-            res.status(201).json(cart);
-        })
-        .catch(err => {
-            res.status(500).json({ message: 'Error al guardar el carrito', error: err });
+        const updatedItems = cart.items.map(item => {
+            const product = products.find(p => p._id.toString() === item.product.toString());
+            if (product) {
+                const subtotal = item.quantity * product.price;
+                return {
+                    ...item,
+                    price: product.price,
+                    subtotal
+                };
+            } else {
+                return item;
+            }
         });
+
+        const total = updatedItems.reduce((acc, item) => acc + item.subtotal, 0);
+
+        const newCart = new Cart({
+            user: userId,
+            items: updatedItems,
+            total: total,
+            status: 'pending',
+        });
+
+        const savedCart = await newCart.save();
+        res.status(201).json(savedCart);
+
+    } catch (err) {
+        res.status(500).json({ message: 'Error al guardar el carrito', error: err });
+    }
 };
+
 module.exports = {
     addToCart,
     getCartById,
