@@ -5,7 +5,6 @@ const Company = require('../models/Company.model')
 const getCompany = (req, res, next) => {
     Company
         .find()
-        // .select({})
         .then(companies => res.json(companies))
         .catch(err => next(err))
 }
